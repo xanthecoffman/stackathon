@@ -2,10 +2,19 @@ import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {auth} from '../store'
+import firebase from 'firebase'
+async function googleLogin() {
+  try {
+    const provider = new firebase.auth.GoogleAuthProvider()
+    const response = await firebase.auth().signInWithPopup(provider)
+    const user = response.user
+    document.write(`Hello ${user.displayName}`)
+    console.log(user)
+  } catch (err) {
+    console.log(err.message)
+  }
+}
 
-/**
- * COMPONENT
- */
 const AuthForm = props => {
   const {name, displayName, handleSubmit, error} = props
 
@@ -73,7 +82,7 @@ export const Login = connect(mapLogin, mapDispatch)(AuthForm)
 export const Signup = connect(mapSignup, mapDispatch)(AuthForm)
 
 /**
- * PROP TYPES
+ * PROP TYPESf
  */
 AuthForm.propTypes = {
   name: PropTypes.string.isRequired,
