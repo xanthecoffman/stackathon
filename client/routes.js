@@ -14,17 +14,45 @@ class Routes extends Component {
   }
 
   render() {
-    const {isLoggedIn} = this.props
+    const {isLoggedIn, isStudent, isTeacher} = this.props
 
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
-        {isLoggedIn && (
+        {isStudent && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
-            <Route path="/home" component={UserHome} />
+            <Route path="/home" component={StudentHome} />
+            <Route exact path="/subjects" component={AllSubjects} />
+            <Route
+              path="/subjects/:subjectId"
+              component={IndividualSubjectView}
+            />
+            <Route path="/subjects/:subjectId/classes" component={AllClasses} />
+          </Switch>
+        )}
+        {isTeacher && (
+          <Switch>
+            {/* Routes placed here are only available after logging in */}
+            <Route path="/home" component={TeacherHome} />
+            <Route exact path="/subjects" component={AllSubjects} />
+            <Route
+              path="/subjects/:subjectId"
+              component={IndividualSubjectView}
+            />
+            <Route path="/subjects/:subjectId/classes" component={AllClasses} />
+            <Route
+              exact
+              path="/subjects/:subjectId/students"
+              component={AllStudents}
+            />
+            <Route
+              exact
+              path="/subjects/:subjectId/students/:studentId"
+              component={IndividualStudent}
+            />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
@@ -41,7 +69,9 @@ const mapState = state => {
   return {
     // Being 'logged in' for our purposes will be defined has having a state.user that has a truthy id.
     // Otherwise, state.user will be an empty object, and state.user.id will be falsey
-    isLoggedIn: !!state.user.id
+    isLoggedIn: !!state.user.id,
+    isStudent: !!state.student,
+    isTeacher: !!state.teacher
   }
 }
 

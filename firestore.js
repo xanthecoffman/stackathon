@@ -3,6 +3,19 @@ require('firebase/app')
 require('firebase/firestore')
 require('firebase/auth')
 
+async function googleLogin() {
+  try {
+    const provider = new firebase.auth.GoogleAuthProvider()
+    const response = await firebase.auth().signInWithPopup(provider)
+    const user = response.user
+    document.write(`Hello ${user.displayName}`)
+    console.log(user)
+  } catch (err) {
+    console.log(err.message)
+  }
+}
+//talk to Alexa about this
+
 var config = {
   apiKey: 'AIzaSyD9ZvTDovfkv-CJNaEQgzkkKQeXorkvrSU',
   authDomain: 'stackathon-tracker.firebaseapp.com',
